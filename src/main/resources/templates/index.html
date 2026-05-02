@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Библиотека</title>
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 700px;
+      margin: 40px auto;
+      background: #64748b;
+      color: #eee;
+    }
+
+    input, button {
+      padding: 8px;
+      margin: 5px;
+    }
+
+    .book {
+      border: 1px solid #444;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .form-row input {
+      flex: 1; /* поля растягиваются */
+    }
+
+    .form-row input#year {
+      max-width: 100px; /* год делаем узким */
+    }
+
+    .form-row button {
+      white-space: nowrap;
+    }
+
+    .book-title {
+      color: #4ea3ff;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .book-title:hover {
+      color: #82c0ff;
+    }
+
+    .book-details {
+      margin-top: 5px;
+      padding-left: 10px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📚 Библиотека (<span th:text="${booksCount}">0</span> книг)</h1>
+
+<!-- Форма добавления -->
+<form method="post" action="/add">
+  <input name="title" placeholder="Название" required>
+  <input name="author" placeholder="Автор">
+  <input name="year" placeholder="Год">
+  <button type="submit">Добавить</button>
+</form>
+
+<hr>
+
+<!-- Если нет книг -->
+<div th:if="${#lists.isEmpty(books)}">
+  <p>Нет книг</p>
+</div>
+
+<!-- Список книг -->
+<div th:each="book : ${books}">
+  <div>
+    <details>
+      <summary th:text="${book.title}"></summary>
+
+      Автор: <span th:text="${book.author}"></span><br>
+      Год: <span th:text="${book.year}"></span>
+
+      <form th:action="@{/delete/{id}(id=${book.id})}" method="post">
+        <button type="submit">Удалить</button>
+      </form>
+    </details>
+  </div>
+</div>
+
+</body>
+</html>
